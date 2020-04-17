@@ -14,9 +14,13 @@ RUN rpm -Uvh "https://packages.microsoft.com/config/rhel/7/packages-microsoft-pr
 && yum -y install dotnet-sdk-3.1 \
 && yum clean all \
 && rm -rf /var/cache/yum
+# Trigger first run experience by running arbitrary cmd
+RUN dotnet --info
 
 #ENV TZ=America/Los_Angeles
 #RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /root
 ADD or-tools_centos-8_v*.tar.gz .
+
+RUN cd or-tools_*_v* && make test_dotnet
